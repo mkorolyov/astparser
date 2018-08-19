@@ -2,8 +2,19 @@ package astparser
 
 import "go/ast"
 
+type ParsedFile struct {
+	Structs   []StructDef
+	Constants []ConstantDef
+}
+
 // Type represent parsed type.
 type Type interface{}
+
+// ConstantDef describes defined constants
+type ConstantDef struct {
+	Name  string
+	Value string
+}
 
 // StructDef describes parsed go struct.
 type StructDef struct {

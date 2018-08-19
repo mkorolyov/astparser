@@ -62,13 +62,13 @@ func Test_parseFile(t *testing.T) {
 	tests := []struct {
 		name     string
 		filename string
-		want     []StructDef
+		want     ParsedFile
 		wantErr  bool
 	}{
 		{
 			name:     "struct with primitives",
 			filename: "fixtures_test/struct_with_primitives.go",
-			want: []StructDef{
+			want: ParsedFile{Structs: []StructDef{
 				{
 					Name: "Primitives",
 					Fields: []FieldDef{
@@ -136,11 +136,12 @@ func Test_parseFile(t *testing.T) {
 					},
 				},
 			},
+			},
 		},
 		{
 			name:     "struct with dep",
 			filename: "fixtures_test/struct_with_dep.go",
-			want: []StructDef{
+			want: ParsedFile{Structs: []StructDef{
 				{
 					Name: "Dep",
 					Fields: []FieldDef{
@@ -162,6 +163,21 @@ func Test_parseFile(t *testing.T) {
 					},
 				},
 			},
+			},
+		},
+		{
+			name:     "constants",
+			filename: "fixtures_test/constants.go",
+			want: ParsedFile{Constants: []ConstantDef{
+				{
+					Name:  "PublicConst",
+					Value: "public",
+				},
+				{
+					Name:  "privateConst",
+					Value: "private",
+				},
+			}},
 		},
 	}
 	for _, tt := range tests {

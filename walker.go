@@ -10,10 +10,11 @@ import (
 )
 
 // TODO parse type comments
-// Walker implements go/ast.Visitor to walk through golang structs and parse them
-// At the moment only structs are parsed.
+// Walker implements go/ast.Visitor to walk through golang
+// structs and constants to parse them.
 type Walker struct {
-	Structs []StructDef
+	Structs   []StructDef
+	Constants []ConstantDef
 }
 
 // A Walkers's Visit method is invoked for each node encountered by go/ast.Walk.
@@ -24,9 +25,29 @@ func (w *Walker) Visit(node ast.Node) ast.Visitor {
 	case *ast.TypeSpec:
 		w.visitStruct(spec)
 		return nil
+	case *ast.ValueSpec:
+		w.visitConstant(spec)
 	}
 
 	return w
+}
+
+func (w *Walker) visitConstant(astValueSpec *ast.ValueSpec) {
+	if len(astValueSpec.Names) < 1 || len(astValueSpec.Values) < 1 {
+		return
+	}
+	name := astValueSpec.Names[0].Name
+	var value string
+	switch v := astValueSpec.Values[0].(type) {
+	case *ast.BasicLit:
+		value = removeQuotes(v.Value)
+	default:
+		return
+	}
+
+	w.Constants = append(w.Constants, ConstantDef{
+		Name: name, Value: value,
+	})
 }
 
 func (w *Walker) visitStruct(astTypeSpec *ast.TypeSpec) {

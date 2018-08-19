@@ -14,8 +14,8 @@ import (
 )
 
 // Load parses files and return a map where key is a file name and
-// value as a slice of golang structs definitions
-func Load(cfg Config) (map[string][]StructDef, error) {
+// value as a parsed file obj with golang structs definitions and constants
+func Load(cfg Config) (map[string]ParsedFile, error) {
 	if err := cfg.prepare(); err != nil {
 		return nil, errors.Wrapf(err, "unexpected config %+v", cfg)
 	}
@@ -25,28 +25,28 @@ func Load(cfg Config) (map[string][]StructDef, error) {
 		return nil, errors.Wrapf(err, "failed to read files from input dir %s", cfg.InputDir)
 	}
 
-	result := map[string][]StructDef{}
+	result := map[string]ParsedFile{}
 	for _, f := range fileNames {
 		filePath := filepath.Join(cfg.InputDir, f)
-		structs, err := parseFile(filePath)
+		file, err := parseFile(filePath)
 		if err != nil {
 			return nil, errors.Wrapf(err, "failed to parse file %s", filePath)
 		}
-		result[f] = structs
+		result[f] = ParsedFile{Structs: file.Structs, Constants: file.Constants}
 	}
 
 	return result, nil
 }
 
-func parseFile(file string) ([]StructDef, error) {
+func parseFile(file string) (ParsedFile, error) {
 	fileSet := token.NewFileSet()
 	parsedFile, err := parser.ParseFile(fileSet, file, nil, parser.ParseComments)
 	if err != nil {
-		return nil, errors.Wrapf(err, "cant parse file: %s", file)
+		return ParsedFile{}, errors.Wrapf(err, "cant parse file: %s", file)
 	}
 	walker := &Walker{}
 	ast.Walk(walker, parsedFile)
-	return walker.Structs, nil
+	return ParsedFile{Structs: walker.Structs, Constants: walker.Constants}, nil
 }
 
 func getFilesNames(cfg Config) ([]string, error) {
