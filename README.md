@@ -28,4 +28,4 @@ Then you can load structs via
 files := astParser.Load(cfg)
 ```
 
-`files` is a `map[string][]StructDef` where key is a file name and value is a list of structs defined in that file. 
+`files` is a `map[string]ParsedFile` where key is a file name and value is a ParsedFile type with structs and constants.
