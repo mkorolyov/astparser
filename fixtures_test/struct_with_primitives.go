@@ -12,5 +12,6 @@ type Primitives struct {
 	Map       map[string]string `json:"map"`
 	Slice     []int             `json:"slice"`
 	Omitempty int               `json:"omitempty,omitempty"`
+	Required  int               `json:"some_int,required"`
 	Ptr       *int              `json:"ptr"`
 }

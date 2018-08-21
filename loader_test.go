@@ -128,6 +128,11 @@ func Test_parseFile(t *testing.T) {
 							Omitempty: true,
 						},
 						{
+							FieldName: "Required",
+							JsonName:  "some_int",
+							FieldType: TypeSimple{Name: "int"},
+						},
+						{
 							FieldName: "Ptr",
 							JsonName:  "ptr",
 							FieldType: TypePointer{
@@ -188,7 +193,7 @@ func Test_parseFile(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("parseFile() = %v, want %v", got, tt.want)
+				t.Errorf("parseFile() = %+v, want %+v", got, tt.want)
 			}
 		})
 	}
