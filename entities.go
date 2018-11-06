@@ -25,8 +25,8 @@ type StructDef struct {
 
 // Tag contains parsed field tags.
 type Tag struct {
-	JsonName string
-
+	JsonName  string
+	Nullable  bool
 	Omitempty bool
 }
 
@@ -35,7 +35,7 @@ type FieldDef struct {
 	FieldName string
 	FieldType Type
 	JsonName  string
-	Omitempty bool
+	Nullable  bool
 	Comments  []string
 }
 

@@ -125,7 +125,7 @@ func Test_parseFile(t *testing.T) {
 							FieldName: "Omitempty",
 							JsonName:  "omitempty",
 							FieldType: TypeSimple{Name: "int"},
-							Omitempty: true,
+							Nullable:  true,
 						},
 						{
 							FieldName: "Required",
@@ -137,6 +137,18 @@ func Test_parseFile(t *testing.T) {
 							JsonName:  "ptr",
 							FieldType: TypePointer{
 								InnerType: TypeSimple{Name: "int"}},
+						},
+						{
+							FieldName: "NullableBool",
+							JsonName:  "nullable_bool",
+							FieldType: TypeSimple{Name: "bool"},
+							Nullable:  true,
+						},
+						{
+							FieldName: "NullableBoolOmitempty",
+							JsonName:  "nullable_bool_omitempty",
+							FieldType: TypeSimple{Name: "bool"},
+							Nullable:  true,
 						},
 					},
 				},

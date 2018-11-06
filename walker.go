@@ -93,7 +93,7 @@ func parseField(astField *ast.Field) (FieldDef, error) {
 	field := FieldDef{
 		FieldName: fieldName,
 		FieldType: fieldType,
-		Omitempty: tag.Omitempty,
+		Nullable:  tag.Omitempty || tag.Nullable,
 		JsonName:  tag.JsonName,
 		Comments:  parseComments(astField.Doc),
 	}
@@ -143,20 +143,27 @@ func parseJSONTag(astTag *ast.BasicLit) (Tag, error) {
 			return Tag{}, fmt.Errorf("invalid tag %s", tagWithName)
 		}
 		tagName := strings.Trim(v[0], " ")
-		if tagName != "json" {
-			continue
-		}
-		tagValues := strings.Split(strings.TrimSpace(v[1]), ",")
-		if len(tagValues) == 1 { // e.g. json:"field_name"
-			t.JsonName = removeQuotes(tagValues[0])
-		} else { // e.g. handle json:"field_name,omitempty" where
-			// tagValues[0] = '"field_name', so we need to cut first char "
-			t.JsonName = tagValues[0][1:len(tagValues[0])]
-			if strings.Index(tagValues[1], "omitempty") != -1 {
-				t.Omitempty = true
+
+		switch tagName {
+		case "nullable":
+			if removeQuotes(v[1]) == "true" {
+				t.Nullable = true
 			}
+		case "json":
+			tagValues := strings.Split(strings.TrimSpace(v[1]), ",")
+			if len(tagValues) == 1 { // e.g. json:"field_name"
+				t.JsonName = removeQuotes(tagValues[0])
+			} else { // e.g. handle json:"field_name,omitempty" where
+				// tagValues[0] = '"field_name', so we need to cut first char "
+				t.JsonName = tagValues[0][1:len(tagValues[0])]
+				if strings.Index(tagValues[1], "omitempty") != -1 {
+					t.Omitempty = true
+				}
+			}
+		default:
+			continue
+
 		}
-		break
 	}
 	return t, nil
 }
