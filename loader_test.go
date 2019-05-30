@@ -68,118 +68,122 @@ func Test_parseFile(t *testing.T) {
 		{
 			name:     "struct with primitives",
 			filename: "fixtures_test/struct_with_primitives.go",
-			want: ParsedFile{Structs: []StructDef{
-				{
-					Name: "Primitives",
-					Fields: []FieldDef{
-						{
-							FieldName: "Int",
-							JsonName:  "int",
-							Comments:  []string{"comment here"},
-							FieldType: TypeSimple{Name: "int"},
-						},
-						{
-							FieldName: "Int64",
-							JsonName:  "int_64",
-							FieldType: TypeSimple{Name: "int64"},
-						},
-						{
-							FieldName: "Float32",
-							JsonName:  "float_32",
-							FieldType: TypeSimple{Name: "float32"},
-						},
-						{
-							FieldName: "Float64",
-							JsonName:  "float_64",
-							FieldType: TypeSimple{Name: "float64"},
-						},
-						{
-							FieldName: "Bool",
-							JsonName:  "bool",
-							FieldType: TypeSimple{Name: "bool"},
-						},
-						{
-							FieldName: "String",
-							JsonName:  "string",
-							FieldType: TypeSimple{Name: "string"},
-						},
-						{
-							FieldName: "Bytes",
-							JsonName:  "bytes",
-							FieldType: TypeArray{
-								InnerType: TypeSimple{Name: "byte"}},
-						},
-						{
-							FieldName: "Map",
-							JsonName:  "map",
-							FieldType: TypeMap{
-								KeyType:   TypeSimple{Name: "string"},
-								ValueType: TypeSimple{Name: "string"}},
-						},
-						{
-							FieldName: "Slice",
-							JsonName:  "slice",
-							FieldType: TypeArray{InnerType: TypeSimple{Name: "int"}},
-						},
-						{
-							FieldName: "Omitempty",
-							JsonName:  "omitempty",
-							FieldType: TypeSimple{Name: "int"},
-							Nullable:  true,
-						},
-						{
-							FieldName: "Required",
-							JsonName:  "some_int",
-							FieldType: TypeSimple{Name: "int"},
-						},
-						{
-							FieldName: "Ptr",
-							JsonName:  "ptr",
-							FieldType: TypePointer{
-								InnerType: TypeSimple{Name: "int"}},
-						},
-						{
-							FieldName: "NullableBool",
-							JsonName:  "nullable_bool",
-							FieldType: TypeSimple{Name: "bool"},
-							Nullable:  true,
-						},
-						{
-							FieldName: "NullableBoolOmitempty",
-							JsonName:  "nullable_bool_omitempty",
-							FieldType: TypeSimple{Name: "bool"},
-							Nullable:  true,
+			want: ParsedFile{
+				Structs: []StructDef{
+					{
+						Name: "Primitives",
+						Fields: []FieldDef{
+							{
+								FieldName: "Int",
+								JsonName:  "int",
+								Comments:  []string{"comment here"},
+								FieldType: TypeSimple{Name: "int"},
+							},
+							{
+								FieldName: "Int64",
+								JsonName:  "int_64",
+								FieldType: TypeSimple{Name: "int64"},
+							},
+							{
+								FieldName: "Float32",
+								JsonName:  "float_32",
+								FieldType: TypeSimple{Name: "float32"},
+							},
+							{
+								FieldName: "Float64",
+								JsonName:  "float_64",
+								FieldType: TypeSimple{Name: "float64"},
+							},
+							{
+								FieldName: "Bool",
+								JsonName:  "bool",
+								FieldType: TypeSimple{Name: "bool"},
+							},
+							{
+								FieldName: "String",
+								JsonName:  "string",
+								FieldType: TypeSimple{Name: "string"},
+							},
+							{
+								FieldName: "Bytes",
+								JsonName:  "bytes",
+								FieldType: TypeArray{
+									InnerType: TypeSimple{Name: "byte"}},
+							},
+							{
+								FieldName: "Map",
+								JsonName:  "map",
+								FieldType: TypeMap{
+									KeyType:   TypeSimple{Name: "string"},
+									ValueType: TypeSimple{Name: "string"}},
+							},
+							{
+								FieldName: "Slice",
+								JsonName:  "slice",
+								FieldType: TypeArray{InnerType: TypeSimple{Name: "int"}},
+							},
+							{
+								FieldName: "Omitempty",
+								JsonName:  "omitempty",
+								FieldType: TypeSimple{Name: "int"},
+								Nullable:  true,
+							},
+							{
+								FieldName: "Required",
+								JsonName:  "some_int",
+								FieldType: TypeSimple{Name: "int"},
+							},
+							{
+								FieldName: "Ptr",
+								JsonName:  "ptr",
+								FieldType: TypePointer{
+									InnerType: TypeSimple{Name: "int"}},
+							},
+							{
+								FieldName: "NullableBool",
+								JsonName:  "nullable_bool",
+								FieldType: TypeSimple{Name: "bool"},
+								Nullable:  true,
+							},
+							{
+								FieldName: "NullableBoolOmitempty",
+								JsonName:  "nullable_bool_omitempty",
+								FieldType: TypeSimple{Name: "bool"},
+								Nullable:  true,
+							},
 						},
 					},
 				},
-			},
+				Package: "fixtures_test",
 			},
 		},
 		{
 			name:     "struct with dep",
 			filename: "fixtures_test/struct_with_dep.go",
-			want: ParsedFile{Structs: []StructDef{
-				{
-					Name: "Dep",
-					Fields: []FieldDef{
-						{
-							FieldType: TypeSimple{Name: "int"},
-							JsonName:  "int",
-							FieldName: "Int",
+			want: ParsedFile{
+				Structs: []StructDef{
+					{
+						Name: "Dep",
+						Fields: []FieldDef{
+							{
+								FieldType: TypeSimple{Name: "int"},
+								JsonName:  "int",
+								FieldName: "Int",
+							},
+						},
+					},
+					{
+						Name: "Struct",
+						Fields: []FieldDef{
+							{
+								FieldType: TypeCustom{Name: "Dep"},
+								JsonName:  "dep",
+								FieldName: "Dep",
+							},
 						},
 					},
 				},
-				{
-					Name: "Struct",
-					Fields: []FieldDef{
-						{
-							FieldType: TypeCustom{Name: "Dep"},
-							JsonName:  "dep",
-							FieldName: "Dep",
-						},
-					},
-				},
-			},
+				Package: "fixtures_test",
 			},
 		},
 		{
@@ -194,7 +198,9 @@ func Test_parseFile(t *testing.T) {
 					Name:  "privateConst",
 					Value: "private",
 				},
-			}},
+			},
+				Package: "fixtures_test",
+			},
 		},
 	}
 	for _, tt := range tests {
