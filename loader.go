@@ -32,7 +32,10 @@ func Load(cfg Config) (map[string]ParsedFile, error) {
 		if err != nil {
 			return nil, errors.Wrapf(err, "failed to parse file %s", filePath)
 		}
-		result[f] = ParsedFile{Structs: file.Structs, Constants: file.Constants}
+		result[f] = ParsedFile{
+			Structs:   file.Structs,
+			Constants: file.Constants,
+			Package:   file.Package}
 	}
 
 	return result, nil
