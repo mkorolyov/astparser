@@ -15,6 +15,7 @@ import (
 type Walker struct {
 	Structs   []StructDef
 	Constants []ConstantDef
+	Package   string
 }
 
 // A Walkers's Visit method is invoked for each node encountered by go/ast.Walk.
@@ -27,6 +28,8 @@ func (w *Walker) Visit(node ast.Node) ast.Visitor {
 		return nil
 	case *ast.ValueSpec:
 		w.visitConstant(spec)
+	case *ast.File:
+		w.Package = spec.Name.String()
 	}
 
 	return w
