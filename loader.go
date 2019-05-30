@@ -46,7 +46,11 @@ func parseFile(file string) (ParsedFile, error) {
 	}
 	walker := &Walker{}
 	ast.Walk(walker, parsedFile)
-	return ParsedFile{Structs: walker.Structs, Constants: walker.Constants}, nil
+	return ParsedFile{
+		Structs:   walker.Structs,
+		Constants: walker.Constants,
+		Package:   walker.Package,
+	}, nil
 }
 
 func getFilesNames(cfg Config) ([]string, error) {

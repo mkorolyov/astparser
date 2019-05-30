@@ -5,6 +5,7 @@ import "go/ast"
 type ParsedFile struct {
 	Structs   []StructDef
 	Constants []ConstantDef
+	Package   string
 }
 
 // Type represent parsed type.
