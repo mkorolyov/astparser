@@ -198,6 +198,14 @@ func Test_parseFile(t *testing.T) {
 					Name:  "privateConst",
 					Value: "private",
 				},
+				{
+					Name:  "MyEnumValue1",
+					Value: "enum-1",
+				},
+				{
+					Name:  "MyEnumValue2",
+					Value: "enum-2",
+				},
 			},
 				Package: "fixtures_test",
 			},
