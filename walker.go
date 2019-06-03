@@ -24,7 +24,7 @@ type Walker struct {
 func (w *Walker) Visit(node ast.Node) ast.Visitor {
 	switch spec := node.(type) {
 	case *ast.TypeSpec:
-		w.visitStruct(spec)
+		w.visitTypeSpec(spec)
 		return nil
 	case *ast.ValueSpec:
 		w.visitConstant(spec)
@@ -53,7 +53,7 @@ func (w *Walker) visitConstant(astValueSpec *ast.ValueSpec) {
 	})
 }
 
-func (w *Walker) visitStruct(astTypeSpec *ast.TypeSpec) {
+func (w *Walker) visitTypeSpec(astTypeSpec *ast.TypeSpec) {
 	structName := astTypeSpec.Name.Name
 
 	switch v := astTypeSpec.Type.(type) {
@@ -73,7 +73,9 @@ func (w *Walker) visitStruct(astTypeSpec *ast.TypeSpec) {
 		}
 
 		w.Structs = append(w.Structs, s)
-
+	case *ast.Ident:
+		// *ast.TypeSpec can also be a type alias
+		return
 	default:
 		log.Fatalf("unexpected type for typeSpec: %s, %+v: %T", structName, astTypeSpec, astTypeSpec.Type)
 	}
