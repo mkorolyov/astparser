@@ -16,4 +16,5 @@ type Primitives struct {
 	Ptr                   *int              `json:"ptr"`
 	NullableBool          bool              `json:"nullable_bool" nullable:"true"`
 	NullableBoolOmitempty bool              `json:"nullable_bool_omitempty,omitempty" nullable:"true"`
+	Interface             interface{}       `json:"-"`
 }

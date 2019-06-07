@@ -69,7 +69,9 @@ func (w *Walker) visitTypeSpec(astTypeSpec *ast.TypeSpec) {
 			if err != nil {
 				log.Fatalf("failed to parse struct %s: %v", structName, err)
 			}
-			s.Fields = append(s.Fields, field)
+			if field != nil {
+				s.Fields = append(s.Fields, *field)
+			}
 		}
 
 		w.Structs = append(w.Structs, s)
@@ -82,27 +84,34 @@ func (w *Walker) visitTypeSpec(astTypeSpec *ast.TypeSpec) {
 
 }
 
-func parseField(astField *ast.Field) (FieldDef, error) {
+func parseField(astField *ast.Field) (*FieldDef, error) {
 	fieldName, err := parseFieldName(astField.Names)
 	if err != nil {
-		return FieldDef{}, errors.Wrapf(err, "failed to parse field %+v name", *astField)
+		return nil, errors.Wrapf(err, "failed to parse field %+v name", *astField)
 	}
-	fieldType, err := parseFieldType(astField.Type)
-	if err != nil {
-		return FieldDef{}, errors.Wrapf(err, "failed to parse field %s type", fieldName)
-	}
+
 	tag, err := parseJSONTag(astField.Tag)
 	if err != nil {
-		return FieldDef{}, errors.Wrapf(err, "failed to parse field %s tags", fieldName)
+		return nil, errors.Wrapf(err, "failed to parse field %s tags", fieldName)
 	}
-	field := FieldDef{
+
+	// if field marked json:"-" we skip it.
+	if tag.JsonName == "-" {
+		return nil, nil
+	}
+
+	fieldType, err := parseFieldType(astField.Type)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to parse field %s type", fieldName)
+	}
+
+	return &FieldDef{
 		FieldName: fieldName,
 		FieldType: fieldType,
 		Nullable:  tag.Omitempty || tag.Nullable,
 		JsonName:  tag.JsonName,
 		Comments:  parseComments(astField.Doc),
-	}
-	return field, nil
+	}, nil
 }
 
 func parseComments(group *ast.CommentGroup) []string {
