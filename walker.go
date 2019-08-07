@@ -90,7 +90,7 @@ func parseField(astField *ast.Field) (*FieldDef, error) {
 		return nil, errors.Wrapf(err, "failed to parse field %+v name", *astField)
 	}
 
-	tag, err := parseJSONTag(astField.Tag)
+	tag, err := parseTags(astField.Tag)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to parse field %s tags", fieldName)
 	}
@@ -111,6 +111,7 @@ func parseField(astField *ast.Field) (*FieldDef, error) {
 		Nullable:  tag.Omitempty || tag.Nullable,
 		JsonName:  tag.JsonName,
 		Comments:  parseComments(astField.Doc),
+		AllTags:   tag.AllTags,
 	}, nil
 }
 
@@ -137,7 +138,7 @@ func removeQuotes(s string) string {
 	return s[1 : len(s)-1]
 }
 
-func parseJSONTag(astTag *ast.BasicLit) (Tag, error) {
+func parseTags(astTag *ast.BasicLit) (Tag, error) {
 	if astTag == nil {
 		return Tag{}, nil
 	}
@@ -147,7 +148,7 @@ func parseJSONTag(astTag *ast.BasicLit) (Tag, error) {
 	}
 	tagString = removeQuotes(tagString) //clean from `json:"place_type,omitempty"` to  json:"place_type,omitempty"
 	splittedTags := strings.Split(tagString, " ")
-	t := Tag{}
+	t := Tag{AllTags: make(map[string]string, len(splittedTags))}
 	for _, tagWithName := range splittedTags {
 		if tagWithName == "" {
 			continue
@@ -157,6 +158,7 @@ func parseJSONTag(astTag *ast.BasicLit) (Tag, error) {
 			return Tag{}, fmt.Errorf("invalid tag %s", tagWithName)
 		}
 		tagName := strings.Trim(v[0], " ")
+		t.AllTags[tagName] = removeQuotes(v[1])
 
 		switch tagName {
 		case "nullable":

@@ -78,37 +78,44 @@ func Test_parseFile(t *testing.T) {
 								JsonName:  "int",
 								Comments:  []string{"comment here"},
 								FieldType: TypeSimple{Name: "int"},
+								AllTags:   map[string]string{"json": "int"},
 							},
 							{
 								FieldName: "Int64",
 								JsonName:  "int_64",
 								FieldType: TypeSimple{Name: "int64"},
+								AllTags:   map[string]string{"json": "int_64"},
 							},
 							{
 								FieldName: "Float32",
 								JsonName:  "float_32",
 								FieldType: TypeSimple{Name: "float32"},
+								AllTags:   map[string]string{"json": "float_32"},
 							},
 							{
 								FieldName: "Float64",
 								JsonName:  "float_64",
 								FieldType: TypeSimple{Name: "float64"},
+								AllTags:   map[string]string{"json": "float_64"},
 							},
 							{
 								FieldName: "Bool",
 								JsonName:  "bool",
 								FieldType: TypeSimple{Name: "bool"},
+								AllTags:   map[string]string{"json": "bool"},
 							},
 							{
 								FieldName: "String",
 								JsonName:  "string",
 								FieldType: TypeSimple{Name: "string"},
+								AllTags:   map[string]string{"json": "string"},
 							},
 							{
 								FieldName: "Bytes",
 								JsonName:  "bytes",
 								FieldType: TypeArray{
 									InnerType: TypeSimple{Name: "byte"}},
+								AllTags: map[string]string{"json": "bytes"},
 							},
 							{
 								FieldName: "Map",
@@ -116,40 +123,47 @@ func Test_parseFile(t *testing.T) {
 								FieldType: TypeMap{
 									KeyType:   TypeSimple{Name: "string"},
 									ValueType: TypeSimple{Name: "string"}},
+								AllTags: map[string]string{"json": "map"},
 							},
 							{
 								FieldName: "Slice",
 								JsonName:  "slice",
 								FieldType: TypeArray{InnerType: TypeSimple{Name: "int"}},
+								AllTags:   map[string]string{"json": "slice"},
 							},
 							{
 								FieldName: "Omitempty",
 								JsonName:  "omitempty",
 								FieldType: TypeSimple{Name: "int"},
 								Nullable:  true,
+								AllTags:   map[string]string{"json": "omitempty,omitempty"},
 							},
 							{
 								FieldName: "Required",
 								JsonName:  "some_int",
 								FieldType: TypeSimple{Name: "int"},
+								AllTags:   map[string]string{"json": "some_int,required"},
 							},
 							{
 								FieldName: "Ptr",
 								JsonName:  "ptr",
 								FieldType: TypePointer{
 									InnerType: TypeSimple{Name: "int"}},
+								AllTags: map[string]string{"json": "ptr"},
 							},
 							{
 								FieldName: "NullableBool",
 								JsonName:  "nullable_bool",
 								FieldType: TypeSimple{Name: "bool"},
 								Nullable:  true,
+								AllTags:   map[string]string{"json": "nullable_bool", "nullable": "true"},
 							},
 							{
 								FieldName: "NullableBoolOmitempty",
 								JsonName:  "nullable_bool_omitempty",
 								FieldType: TypeSimple{Name: "bool"},
 								Nullable:  true,
+								AllTags:   map[string]string{"json": "nullable_bool_omitempty,omitempty", "nullable": "true"},
 							},
 						},
 					},
@@ -169,6 +183,7 @@ func Test_parseFile(t *testing.T) {
 								FieldType: TypeSimple{Name: "int"},
 								JsonName:  "int",
 								FieldName: "Int",
+								AllTags:   map[string]string{"json": "int"},
 							},
 						},
 					},
@@ -179,6 +194,7 @@ func Test_parseFile(t *testing.T) {
 								FieldType: TypeCustom{Name: "Dep"},
 								JsonName:  "dep",
 								FieldName: "Dep",
+								AllTags:   map[string]string{"json": "dep"},
 							},
 						},
 					},
@@ -219,7 +235,7 @@ func Test_parseFile(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("parseFile() = %+v, want %+v", got, tt.want)
+				t.Errorf("\nhave %+v, \nwant %+v", got, tt.want)
 			}
 		})
 	}

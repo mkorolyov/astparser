@@ -29,6 +29,7 @@ type Tag struct {
 	JsonName  string
 	Nullable  bool
 	Omitempty bool
+	AllTags   map[string]string
 }
 
 // FieldDef described parsed go struct field.
@@ -38,6 +39,7 @@ type FieldDef struct {
 	JsonName  string
 	Nullable  bool
 	Comments  []string
+	AllTags   map[string]string
 }
 
 // TypeSimple indicates that type is a primitive golang type like int or string.
