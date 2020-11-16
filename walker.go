@@ -78,6 +78,8 @@ func (w *Walker) visitTypeSpec(astTypeSpec *ast.TypeSpec) {
 	case *ast.Ident:
 		// *ast.TypeSpec can also be a type alias
 		return
+	case *ast.InterfaceType:
+		return
 	default:
 		log.Fatalf("unexpected type for typeSpec: %s, %+v: %T", structName, astTypeSpec, astTypeSpec.Type)
 	}
@@ -132,7 +134,8 @@ func parseComments(group *ast.CommentGroup) []string {
 
 func removeQuotes(s string) string {
 	if len(s) < 2 {
-		log.Fatalf("bad input for removing quotes: %s", s)
+		//panic(fmt.Sprintf("bad input for removing quotes: %s", s))
+		return s
 	}
 
 	return s[1 : len(s)-1]
