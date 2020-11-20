@@ -75,6 +75,11 @@ func (w *Walker) visitTypeSpec(astTypeSpec *ast.TypeSpec) {
 		}
 
 		w.Structs = append(w.Structs, s)
+
+	case *ast.ArrayType:
+		// skip array aliases for now
+		return
+
 	case *ast.Ident:
 		// *ast.TypeSpec can also be a type alias
 		return
