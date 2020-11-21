@@ -34,12 +34,14 @@ type Tag struct {
 
 // FieldDef described parsed go struct field.
 type FieldDef struct {
-	FieldName string
-	FieldType Type
-	JsonName  string
-	Nullable  bool
-	Comments  []string
-	AllTags   map[string]string
+	CompositionField bool
+	// Could be empty for CompositionField
+	FieldName        string
+	FieldType        Type
+	JsonName         string
+	Nullable         bool
+	Comments         []string
+	AllTags          map[string]string
 }
 
 // TypeSimple indicates that type is a primitive golang type like int or string.
@@ -72,4 +74,4 @@ type TypePointer struct {
 }
 
 // TypeInterfaceValue indicates that type is a interface{}
-type TypeInterfaceValue struct {}
+type TypeInterfaceValue struct{}

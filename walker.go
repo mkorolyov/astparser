@@ -92,14 +92,11 @@ func (w *Walker) visitTypeSpec(astTypeSpec *ast.TypeSpec) {
 }
 
 func parseField(astField *ast.Field) (*FieldDef, error) {
-	fieldName, err := parseFieldName(astField.Names)
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to parse field %+v name", *astField)
-	}
+	fieldName := parseFieldName(astField.Names)
 
 	tag, err := parseTags(astField.Tag)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to parse field %s tags", fieldName)
+		return nil, errors.Wrapf(err, "failed to parse field %q tags", fieldName)
 	}
 
 	// if field marked json:"-" we skip it.
@@ -112,14 +109,20 @@ func parseField(astField *ast.Field) (*FieldDef, error) {
 		return nil, errors.Wrapf(err, "failed to parse field %s type", fieldName)
 	}
 
-	return &FieldDef{
+	fieldDef := &FieldDef{
 		FieldName: fieldName,
 		FieldType: fieldType,
 		Nullable:  tag.Omitempty || tag.Nullable,
 		JsonName:  tag.JsonName,
 		Comments:  parseComments(astField.Doc),
 		AllTags:   tag.AllTags,
-	}, nil
+	}
+
+	if fieldDef.FieldName == "" {
+		fieldDef.CompositionField = true
+	}
+
+	return fieldDef, nil
 }
 
 func parseComments(group *ast.CommentGroup) []string {
@@ -230,11 +233,11 @@ func parseFieldType(t ast.Expr) (Type, error) {
 	}
 }
 
-func parseFieldName(fieldNames []*ast.Ident) (string, error) {
+func parseFieldName(fieldNames []*ast.Ident) string {
 	if len(fieldNames) == 0 {
-		return "", fmt.Errorf("anonimuous fields are not supported")
+		return ""
 	}
-	return fieldNames[0].Name, nil
+	return fieldNames[0].Name
 }
 
 func simpleType(fieldType string) Type {

@@ -196,6 +196,17 @@ func Test_parseFile(t *testing.T) {
 						},
 					},
 					{
+						Name: "Dep2",
+						Fields: []FieldDef{
+							{
+								FieldType: TypeSimple{Name: "string"},
+								JsonName:  "string",
+								FieldName: "String",
+								AllTags:   map[string]string{"json": "string"},
+							},
+						},
+					},
+					{
 						Name: "Struct",
 						Fields: []FieldDef{
 							{
@@ -203,6 +214,10 @@ func Test_parseFile(t *testing.T) {
 								JsonName:  "dep",
 								FieldName: "Dep",
 								AllTags:   map[string]string{"json": "dep"},
+							},
+							{
+								FieldType: TypeCustom{Name: "Dep2"},
+								CompositionField: true,
 							},
 						},
 					},
