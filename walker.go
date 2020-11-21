@@ -194,6 +194,8 @@ func parseTags(astTag *ast.BasicLit) (Tag, error) {
 
 func parseFieldType(t ast.Expr) (Type, error) {
 	switch v := t.(type) {
+	case *ast.InterfaceType:
+		return TypeInterfaceValue{}, nil
 	case *ast.Ident:
 		if st := simpleType(v.Name); st != nil {
 			return st, nil

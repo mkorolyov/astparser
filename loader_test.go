@@ -126,6 +126,14 @@ func Test_parseFile(t *testing.T) {
 								AllTags: map[string]string{"json": "map"},
 							},
 							{
+								FieldName: "MapInterface",
+								JsonName:  "map_interface",
+								FieldType: TypeMap{
+									KeyType:   TypeSimple{Name: "string"},
+									ValueType: TypeInterfaceValue{}},
+								AllTags: map[string]string{"json": "map_interface"},
+							},
+							{
 								FieldName: "Slice",
 								JsonName:  "slice",
 								FieldType: TypeArray{InnerType: TypeSimple{Name: "int"}},

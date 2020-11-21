@@ -70,3 +70,6 @@ type TypeCustom struct {
 type TypePointer struct {
 	InnerType Type
 }
+
+// TypeInterfaceValue indicates that type is a interface{}
+type TypeInterfaceValue struct {}
