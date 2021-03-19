@@ -36,12 +36,12 @@ type Tag struct {
 type FieldDef struct {
 	CompositionField bool
 	// Could be empty for CompositionField
-	FieldName        string
-	FieldType        Type
-	JsonName         string
-	Nullable         bool
-	Comments         []string
-	AllTags          map[string]string
+	FieldName string
+	FieldType Type
+	JsonName  string
+	Nullable  bool
+	Comments  []string
+	AllTags   map[string]string
 }
 
 // TypeSimple indicates that type is a primitive golang type like int or string.
@@ -64,8 +64,10 @@ type TypeMap struct {
 
 // TypeCustomer indicates that type is a defined struct or type alias.
 type TypeCustom struct {
-	Name string
-	Expr ast.Expr
+	// type alias. like `type myCost string`
+	Alias bool
+	Name  string
+	Expr  ast.Expr
 }
 
 // TypePointer indicates that type is a point with underlying any golang type

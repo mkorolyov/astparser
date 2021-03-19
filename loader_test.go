@@ -216,8 +216,14 @@ func Test_parseFile(t *testing.T) {
 								AllTags:   map[string]string{"json": "dep"},
 							},
 							{
-								FieldType: TypeCustom{Name: "Dep2"},
+								FieldType:        TypeCustom{Name: "Dep2"},
 								CompositionField: true,
+							},
+							{
+								CompositionField: false,
+								FieldName:        "Constant",
+								FieldType:        TypeCustom{Name: "MyEnum", Alias: true},
+								Nullable:         false,
 							},
 						},
 					},
