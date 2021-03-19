@@ -203,7 +203,11 @@ func parseFieldType(t ast.Expr) (Type, error) {
 		if st := simpleType(v.Name); st != nil {
 			return st, nil
 		}
-		return TypeCustom{Name: v.Name}, nil
+		alias := false
+		if v.Obj == nil {
+			alias = true
+		}
+		return TypeCustom{Name: v.Name, Alias: alias}, nil
 	case *ast.SelectorExpr:
 		return TypeCustom{Name: v.Sel.Name, Expr: t}, nil
 	case *ast.ArrayType:
