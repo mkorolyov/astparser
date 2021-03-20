@@ -10,8 +10,16 @@ type Dep2 struct {
 
 type StructSlice []Dep
 
+type MyEnum2 string
+
+const (
+	MyEnum21 MyEnum2 = "1"
+	MyEnum22 MyEnum2 = "2"
+)
+
 type Struct struct {
 	Dep Dep `json:"dep"`
 	Dep2
-	Constant MyEnum
+	Constant  MyEnum
+	Constant2 MyEnum2
 }
