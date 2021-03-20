@@ -225,7 +225,23 @@ func Test_parseFile(t *testing.T) {
 								FieldType:        TypeCustom{Name: "MyEnum", Alias: true},
 								Nullable:         false,
 							},
+							{
+								CompositionField: false,
+								FieldName:        "Constant2",
+								FieldType:        TypeCustom{Name: "MyEnum2", AliasType: TypeSimple{Name: "string"}},
+								Nullable:         false,
+							},
 						},
+					},
+				},
+				Constants: []ConstantDef{
+					{
+						Name:  "MyEnum21",
+						Value: "1",
+					},
+					{
+						Name:  "MyEnum22",
+						Value: "2",
 					},
 				},
 				Package: "fixtures_test",

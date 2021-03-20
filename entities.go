@@ -65,9 +65,12 @@ type TypeMap struct {
 // TypeCustomer indicates that type is a defined struct or type alias.
 type TypeCustom struct {
 	// type alias. like `type myCost string`
-	Alias bool
-	Name  string
-	Expr  ast.Expr
+	// is true when we cant resolve alias type.
+	Alias     bool
+	// contains the alias type
+	AliasType Type
+	Name      string
+	Expr      ast.Expr
 }
 
 // TypePointer indicates that type is a point with underlying any golang type

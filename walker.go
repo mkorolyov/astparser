@@ -203,11 +203,29 @@ func parseFieldType(t ast.Expr) (Type, error) {
 		if st := simpleType(v.Name); st != nil {
 			return st, nil
 		}
-		alias := false
+		typeCustom := TypeCustom{Name: v.Name}
 		if v.Obj == nil {
-			alias = true
+			typeCustom.Alias = true
+			return typeCustom, nil
 		}
-		return TypeCustom{Name: v.Name, Alias: alias}, nil
+
+		if v.Obj.Decl == nil {
+			return typeCustom, nil
+		}
+
+		switch decl := v.Obj.Decl.(type) {
+		case *ast.TypeSpec:
+			aliasType, err := parseFieldType(decl.Type)
+			if err != nil {
+				return nil, fmt.Errorf("parse alias type: %w", err)
+			}
+			if aliasType != nil {
+				typeCustom.AliasType = aliasType
+			}
+
+		}
+
+		return typeCustom, nil
 	case *ast.SelectorExpr:
 		return TypeCustom{Name: v.Sel.Name, Expr: t}, nil
 	case *ast.ArrayType:
@@ -232,6 +250,8 @@ func parseFieldType(t ast.Expr) (Type, error) {
 			return nil, errors.Wrapf(er, "failed to parse map value type %+v", v.Value)
 		}
 		return TypeMap{KeyType: kt, ValueType: vt}, nil
+	case *ast.StructType:
+		return nil, nil
 	default:
 		return nil, fmt.Errorf("unexpected %+[1]v with type %[1]T", t)
 	}
